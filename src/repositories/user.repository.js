@@ -16,7 +16,6 @@ export const createUser = async (userData) => {
   `;
 
   const values = [nombres, apellidos, email, password, tipo, documento, telefono];
-  
   const { rows } = await pool.query(query, values);
   return rows[0];
 };
