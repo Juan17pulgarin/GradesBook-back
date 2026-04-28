@@ -2,8 +2,8 @@ import * as userRepository from '../repositories/user.repository.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-export const login = async (email, password) => {
-  const user = await userRepository.findUserByEmail(email);
+export const login = async (documento, password) => {
+  const user = await userRepository.findUserByDocumento(documento);
   
   if (!user) throw new Error('UNAUTHORIZED');
 

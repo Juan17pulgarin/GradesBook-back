@@ -24,8 +24,8 @@ export const createUserHandler = async (req, res) => {
       user
     });
   } catch (error) {
-    if (error.message === 'EMAIL_EXISTS') {
-      return res.status(400).json({ message: 'El correo electrónico ya está registrado' });
+    if (error.message === 'DOCUMENT_EXISTS') {
+      return res.status(400).json({ message: 'El número de documento ya está registrado' });
     }
     res.status(500).json({ message: 'Error al crear el usuario', error: error.message });
   }
