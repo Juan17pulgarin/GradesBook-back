@@ -10,4 +10,16 @@ router.post('/',
   userController.createUserHandler
 );
 
+router.patch('/:id', 
+  validateToken, 
+  checkRole(['ADMINISTRADOR']), 
+  userController.deleteUserHandler
+);
+
+router.get('/', 
+  validateToken, 
+  checkRole(['ADMINISTRADOR', 'DOCENTE']), 
+  userController.listUsersHandler
+);
+
 export default router;
