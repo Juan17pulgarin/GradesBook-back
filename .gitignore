@@ -1,2 +1,10 @@
 node_modules/
 .env
+.env.*
+prisma.config.ts
+prisma.config.js
+npm-debug.log*
+.DS_Store
+Thumbs.db
+dist/
+build/

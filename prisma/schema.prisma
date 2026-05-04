@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model actividades {
+  id                 Int             @id @default(autoincrement())
+  carga_academica_id Int
+  periodo_id         Int
+  nombre             String          @db.VarChar(100)
+  descripcion        String?
+  porcentaje         Decimal         @db.Decimal(5, 2)
+  fecha              DateTime?       @db.Date
+  carga_academica    carga_academica @relation(fields: [carga_academica_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_carga")
+  periodos           periodos        @relation(fields: [periodo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_periodo")
+  notas              notas[]
+}
+
+model carga_academica {
+  id          Int           @id @default(autoincrement())
+  docente_id  Int
+  curso_id    Int
+  materia_id  Int
+  actividades actividades[]
+  cursos      cursos        @relation(fields: [curso_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_curso")
+  usuarios    usuarios      @relation(fields: [docente_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_docente")
+  materias    materias      @relation(fields: [materia_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_materia")
+}
+
+model cursos {
+  id               Int               @id @default(autoincrement())
+  nombre           String            @db.VarChar(50)
+  anio             Int
+  capacidad_maxima Int?
+  estado           estado_curso
+  carga_academica  carga_academica[]
+}
+
+model materias {
+  id              Int               @id @default(autoincrement())
+  nombre          String            @db.VarChar(100)
+  estado          estado_materia
+  carga_academica carga_academica[]
+}
+
+model notas {
+  id            Int         @id @default(autoincrement())
+  estudiante_id Int
+  actividad_id  Int
+  nota          Decimal     @db.Decimal(5, 2)
+  observacion   String?
+  actividades   actividades @relation(fields: [actividad_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_actividad")
+  usuarios      usuarios    @relation(fields: [estudiante_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_estudiante")
+}
+
+model periodos {
+  id           Int           @id @default(autoincrement())
+  nombre       String        @db.VarChar(50)
+  fecha_inicio DateTime      @db.Date
+  fecha_fin    DateTime      @db.Date
+  actividades  actividades[]
+}
+
+model usuarios {
+  id              Int               @id @default(autoincrement())
+  email           String            @db.VarChar(100)
+  password        String            @db.VarChar(255)
+  tipo            tipo_usuario
+  nombres         String            @db.VarChar(100)
+  apellidos       String            @db.VarChar(100)
+  documento       String            @db.VarChar(20)
+  telefono        String            @db.VarChar(45)
+  direccion       String?           @db.VarChar(100)
+  carnet          String?           @db.VarChar(50)
+  activo          Boolean           @default(true)
+  carga_academica carga_academica[]
+  notas           notas[]
+}
+
+enum estado_curso {
+  ACTIVO
+  CANCELADO
+  FINALIZADO
+}
+
+enum estado_materia {
+  ACTIVA
+  INACTIVA
+}
+
+enum tipo_usuario {
+  ADMINISTRADOR
+  DOCENTE
+  ESTUDIANTE
+}
