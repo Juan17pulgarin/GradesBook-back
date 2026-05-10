@@ -65,3 +65,42 @@ export const listAcademicLoads = async () => {
         }
     });
 };
+
+// Validar que no exista una carga académica con el mismo curso y materia para otro docente
+export const findAcademicLoadById = async (id) => {
+    return await prisma.carga_academica.findUnique({
+        where: {
+        id: parseInt(id)
+        }
+    });
+};
+
+export const findByCourseAndSubject = async (
+    curso_id,
+    materia_id
+) => {
+
+    return await prisma.carga_academica.findFirst({
+        where: {
+        curso_id: parseInt(curso_id),
+        materia_id: parseInt(materia_id)
+        }
+    });
+
+};
+
+// Actualizar una carga académica
+export const updateAcademicLoad = async (id, data) => {
+
+    return await prisma.carga_academica.update({
+        where: {
+        id: parseInt(id)
+        },
+        data: {
+        docente_id: parseInt(data.docente_id),
+        curso_id: parseInt(data.curso_id),
+        materia_id: parseInt(data.materia_id)
+        }
+    });
+
+};
