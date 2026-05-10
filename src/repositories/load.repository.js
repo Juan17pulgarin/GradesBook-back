@@ -10,11 +10,7 @@ export const createAcademicLoad = async (data) => {
     });
 };
 
-export const findExistingAcademicLoad = async (
-    docente_id,
-    curso_id,
-    materia_id
-    ) => {
+export const findExistingAcademicLoad = async (docente_id, curso_id, materia_id) => {
     return await prisma.carga_academica.findFirst({
         where: {
         docente_id: parseInt(docente_id),
@@ -75,11 +71,7 @@ export const findAcademicLoadById = async (id) => {
     });
 };
 
-export const findByCourseAndSubject = async (
-    curso_id,
-    materia_id
-) => {
-
+export const findByCourseAndSubject = async (curso_id, materia_id) => {
     return await prisma.carga_academica.findFirst({
         where: {
         curso_id: parseInt(curso_id),

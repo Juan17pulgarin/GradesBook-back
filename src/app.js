@@ -6,6 +6,8 @@ import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
 import courseRoutes from './routes/course.routes.js';
 import subjectRoutes from './routes/subject.routes.js';
+import periodRoutes from './routes/period.routes.js'; //periodos
+import enrollmentRoutes from './routes/enrollment.routes.js'; //matriculas
 import academicLoadRoutes from './routes/load.routes.js';
 
 const app = express();
@@ -19,6 +21,8 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/courses', courseRoutes);
 app.use('/api/v1/subjects', subjectRoutes);
+app.use('/api/v1/periods', periodRoutes);
+app.use('/api/v1/enrollments', enrollmentRoutes);
 app.use('/api/v1/academic-loads', academicLoadRoutes);
 
 const PORT = process.env.PORT || 3000;

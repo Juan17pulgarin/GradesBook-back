@@ -2,15 +2,12 @@ import * as academicLoadService from '../services/load.service.js';
 
 export const createAcademicLoadHandler = async (req, res) => {
     try {
-
-        const academicLoad =
-        await academicLoadService.createAcademicLoad(req.body);
+        const academicLoad =await academicLoadService.createAcademicLoad(req.body);
 
         res.status(201).json({
         message: 'Carga académica creada exitosamente',
         academicLoad
         });
-
     } catch (error) {
 
         if (error.message === 'TEACHER_NOT_FOUND') {
@@ -47,9 +44,7 @@ export const createAcademicLoadHandler = async (req, res) => {
 export const listAcademicLoadsHandler = async (req, res) => {
     try {
 
-        const academicLoads =
-        await academicLoadService.listAcademicLoads();
-
+        const academicLoads = await academicLoadService.listAcademicLoads();
         res.json(academicLoads);
 
     } catch (error) {
@@ -64,14 +59,8 @@ export const listAcademicLoadsHandler = async (req, res) => {
 export const updateAcademicLoadHandler = async (req, res) => {
 
     try {
-
         const { id } = req.params;
-
-        const updatedAcademicLoad =
-        await academicLoadService.updateAcademicLoad(
-            id,
-            req.body
-        );
+        const updatedAcademicLoad = await academicLoadService.updateAcademicLoad(id, req.body);
 
         res.json({
         message: 'Carga académica actualizada exitosamente',

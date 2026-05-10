@@ -3,25 +3,19 @@ import * as academicLoadRepository from '../repositories/load.repository.js';
 export const createAcademicLoad = async (data) => {
 
     // validar docente
-    const teacher = await academicLoadRepository.findTeacherById(
-        data.docente_id
-    );
+    const teacher = await academicLoadRepository.findTeacherById(data.docente_id);
     if (!teacher) {
         throw new Error('TEACHER_NOT_FOUND');
     }
 
     // validar curso
-    const course = await academicLoadRepository.findCourseById(
-        data.curso_id
-    );
+    const course = await academicLoadRepository.findCourseById(data.curso_id);
     if (!course) {
         throw new Error('COURSE_NOT_FOUND');
     }
 
     // validar materia
-    const subject = await academicLoadRepository.findSubjectById(
-        data.materia_id
-    );
+    const subject = await academicLoadRepository.findSubjectById(data.materia_id);
     if (!subject) {
         throw new Error('SUBJECT_NOT_FOUND');
     }
@@ -44,35 +38,25 @@ export const listAcademicLoads = async () => {
 
 export const updateAcademicLoad = async (id, data) => {
 
-    const academicLoad =
-        await academicLoadRepository.findAcademicLoadById(id);
+    const academicLoad = await academicLoadRepository.findAcademicLoadById(id);
     if (!academicLoad) {
         throw new Error('ACADEMIC_LOAD_NOT_FOUND');
     }
 
     // validar docente
-    const teacher =
-        await academicLoadRepository.findTeacherById(
-        data.docente_id
-        );
+    const teacher = await academicLoadRepository.findTeacherById(data.docente_id);
     if (!teacher) {
         throw new Error('TEACHER_NOT_FOUND');
     }
 
     // validar curso
-    const course =
-        await academicLoadRepository.findCourseById(
-        data.curso_id
-        );
+    const course = await academicLoadRepository.findCourseById(data.curso_id);
     if (!course) {
         throw new Error('COURSE_NOT_FOUND');
     }
 
     // validar materia
-    const subject =
-        await academicLoadRepository.findSubjectById(
-        data.materia_id
-        );
+    const subject = await academicLoadRepository.findSubjectById(data.materia_id);
     if (!subject) {
         throw new Error('SUBJECT_NOT_FOUND');
     }
@@ -93,9 +77,6 @@ export const updateAcademicLoad = async (id, data) => {
         throw new Error('SUBJECT_ALREADY_ASSIGNED');
     }
 
-    return await academicLoadRepository.updateAcademicLoad(
-        id,
-        data
-    );
+    return await academicLoadRepository.updateAcademicLoad(id, data);
 
 };

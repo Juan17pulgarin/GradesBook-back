@@ -38,6 +38,7 @@ model cursos {
   capacidad_maxima Int?
   estado           estado_curso
   carga_academica  carga_academica[]
+  matriculas    matriculas[]
 }
 
 model materias {
@@ -79,6 +80,19 @@ model usuarios {
   activo          Boolean           @default(true)
   carga_academica carga_academica[]
   notas           notas[]
+  matriculas      matriculas[]
+}
+
+model matriculas {
+  id             Int      @id @default(autoincrement())
+
+  estudiante_id  Int
+  curso_id       Int
+
+  usuarios       usuarios @relation(fields: [estudiante_id], references: [id])
+  cursos         cursos   @relation(fields: [curso_id], references: [id])
+
+  @@unique([estudiante_id, curso_id])
 }
 
 enum estado_curso {
