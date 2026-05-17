@@ -19,7 +19,7 @@ router.get(
     academicLoadController.listAcademicLoadsHandler
 );
 
-router.put(
+router.patch(
     '/:id',
     validateToken,
     checkRole([ROLES.ADMIN]),

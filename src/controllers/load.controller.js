@@ -27,10 +27,10 @@ export const createAcademicLoadHandler = async (req, res) => {
                 message: 'La materia no existe'
             });
         }
-
-        if (error.message === 'ACADEMIC_LOAD_ALREADY_EXISTS') {
+        
+        if (error.message === 'SUBJECT_ALREADY_ASSIGNED') {
             return res.status(400).json({
-                message: 'La carga académica ya existe'
+                message:'Ya existe un docente asignado a esa materia en ese curso'
             });
         }
 
@@ -57,13 +57,13 @@ export const listAcademicLoadsHandler = async (req, res) => {
 };
 
 export const updateAcademicLoadHandler = async (req, res) => {
-
     try {
+
         const { id } = req.params;
         const updatedAcademicLoad = await academicLoadService.updateAcademicLoad(id, req.body);
 
         res.json({
-            message: 'Carga académica actualizada exitosamente',
+            message:'Carga académica actualizada exitosamente',
             updatedAcademicLoad
         });
 
@@ -71,25 +71,25 @@ export const updateAcademicLoadHandler = async (req, res) => {
 
         if (error.message === 'ACADEMIC_LOAD_NOT_FOUND') {
             return res.status(404).json({
-                message: 'La carga académica no existe'
+                message:'La carga académica no existe'
             });
         }
 
         if (error.message === 'TEACHER_NOT_FOUND') {
             return res.status(404).json({
-                message: 'El docente no existe'
+                message:'El docente no existe'
             });
         }
 
         if (error.message === 'COURSE_NOT_FOUND') {
             return res.status(404).json({
-                message: 'El curso no existe'
+                message:'El curso no existe'
             });
         }
 
         if (error.message === 'SUBJECT_NOT_FOUND') {
             return res.status(404).json({
-                message: 'La materia no existe'
+                message:'La materia no existe'
             });
         }
 
@@ -100,10 +100,8 @@ export const updateAcademicLoadHandler = async (req, res) => {
         }
 
         res.status(500).json({
-            message: 'Error al actualizar la carga académica',
+            message:'Error al actualizar la carga académica',
             error: error.message
         });
-
     }
-
 };

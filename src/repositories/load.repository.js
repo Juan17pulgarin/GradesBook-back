@@ -33,7 +33,8 @@ export const findTeacherById = async (id) => {
 export const findCourseById = async (id) => {
     return await prisma.cursos.findUnique({
         where: {
-            id: parseInt(id)
+            id: parseInt(id),
+            estado: 'ACTIVO'
         }
     });
 };
@@ -41,7 +42,8 @@ export const findCourseById = async (id) => {
 export const findSubjectById = async (id) => {
     return await prisma.materias.findUnique({
         where: {
-            id: parseInt(id)
+            id: parseInt(id),
+            estado: 'ACTIVA'
         }
     });
 };
@@ -83,16 +85,21 @@ export const findByCourseAndSubject = async (curso_id, materia_id) => {
 
 // Actualizar una carga académica
 export const updateAcademicLoad = async (id, data) => {
-
     return await prisma.carga_academica.update({
         where: {
             id: parseInt(id)
         },
+
         data: {
-            docente_id: parseInt(data.docente_id),
-            curso_id: parseInt(data.curso_id),
-            materia_id: parseInt(data.materia_id)
+            ...(data.docente_id && {
+                docente_id: parseInt(data.docente_id)
+            }),
+            ...(data.curso_id && {
+                curso_id: parseInt(data.curso_id)
+            }),
+            ...(data.materia_id && {
+                materia_id:parseInt(data.materia_id)
+            })
         }
     });
-
 };
