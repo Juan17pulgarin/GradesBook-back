@@ -31,6 +31,17 @@ export const listSubjectsHandler = async (req, res) => {
   }
 };
 
+export const listStudentSubjectsHandler = async (req, res) => {
+  try {
+    const subjects = await subjectService.listSubjectsByStudent(req.user.id);
+    res.json(subjects);
+  } catch (error) {
+    const statusCode = 500;
+    const message = "Error al listar las materias del estudiante";
+    res.status(statusCode).json({message});
+  }
+};
+
 export const deleteSubjectHandler = async (req, res) => {
   try {
     const { id } = req.params;

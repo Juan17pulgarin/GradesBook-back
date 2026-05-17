@@ -22,6 +22,10 @@ export const getSubjectsList = async () => {
   });
 };
 
+export const listSubjectsByStudent = async (estudiante_id) => {
+    return await subjectRepository.listSubjectsByStudent(estudiante_id);
+};
+
 export const disableSubject = async (id) => {
   const subject = await subjectRepository.findSubjectById(id);
 

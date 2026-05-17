@@ -17,6 +17,13 @@ router.get('/',
   subjectController.listSubjectsHandler
 );
 
+router.get(
+  '/my-subjects',
+  validateToken,
+  checkRole([ROLES.ESTUDIANTE]),
+  subjectController.listStudentSubjectsHandler
+);
+
 router.patch('/:id', 
   validateToken, 
   checkRole([ROLES.ADMIN]), 

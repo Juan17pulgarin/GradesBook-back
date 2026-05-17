@@ -27,6 +27,39 @@ export const listSubjects = async (where = {}) => {
   });
 };
 
+export const listSubjectsByStudent = async (estudiante_id) => {
+    const enrollments = await prisma.matriculas.findMany({
+            where: {
+                estudiante_id: parseInt(estudiante_id)
+            },
+
+            select: {
+                curso_id: true
+            }
+        });
+
+    const courseIds = enrollments.map(enrollment => enrollment.curso_id);
+
+    return await prisma.carga_academica.findMany({
+        where: {
+            curso_id: {
+                in: courseIds
+            }
+        },
+
+        include: {
+            materias: true,
+            cursos: true,
+            usuarios: {
+                select: {
+                    nombres: true,
+                    apellidos: true
+                }
+            }
+        }
+    });
+};
+
 export const updateSubject = async (id, subjectData) => {
   return await prisma.materias.update({
     where: { id: parseInt(id) },
