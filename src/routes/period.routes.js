@@ -15,10 +15,7 @@ router.post(
 router.get(
     '/',
     validateToken,
-    checkRole([
-        ROLES.ADMIN,
-        ROLES.DOCENTE
-    ]),
+    checkRole([ROLES.ADMIN, ROLES.DOCENTE, ROLES.ESTUDIANTE]),
     periodController.listPeriodsHandler
 );
 

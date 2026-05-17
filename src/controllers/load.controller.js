@@ -11,32 +11,32 @@ export const createAcademicLoadHandler = async (req, res) => {
     } catch (error) {
 
         if (error.message === 'TEACHER_NOT_FOUND') {
-        return res.status(404).json({
-            message: 'El docente no existe'
-        });
+            return res.status(404).json({
+                message: 'El docente no existe'
+            });
         }
 
         if (error.message === 'COURSE_NOT_FOUND') {
-        return res.status(404).json({
-            message: 'El curso no existe'
-        });
+            return res.status(404).json({
+                message: 'El curso no existe'
+            });
         }
 
         if (error.message === 'SUBJECT_NOT_FOUND') {
-        return res.status(404).json({
-            message: 'La materia no existe'
-        });
+            return res.status(404).json({
+                message: 'La materia no existe'
+            });
         }
 
         if (error.message === 'ACADEMIC_LOAD_ALREADY_EXISTS') {
-        return res.status(400).json({
-            message: 'La carga académica ya existe'
-        });
+            return res.status(400).json({
+                message: 'La carga académica ya existe'
+            });
         }
 
         res.status(500).json({
-        message: 'Error al crear la carga académica',
-        error: error.message
+            message: 'Error al crear la carga académica',
+            error: error.message
         });
     }
 };
@@ -50,8 +50,8 @@ export const listAcademicLoadsHandler = async (req, res) => {
     } catch (error) {
 
         res.status(500).json({
-        message: 'Error al listar cargas académicas',
-        error: error.message
+            message: 'Error al listar cargas académicas',
+            error: error.message
         });
     }
 };
@@ -63,46 +63,45 @@ export const updateAcademicLoadHandler = async (req, res) => {
         const updatedAcademicLoad = await academicLoadService.updateAcademicLoad(id, req.body);
 
         res.json({
-        message: 'Carga académica actualizada exitosamente',
-        updatedAcademicLoad
+            message: 'Carga académica actualizada exitosamente',
+            updatedAcademicLoad
         });
 
     } catch (error) {
 
         if (error.message === 'ACADEMIC_LOAD_NOT_FOUND') {
-        return res.status(404).json({
-            message: 'La carga académica no existe'
-        });
+            return res.status(404).json({
+                message: 'La carga académica no existe'
+            });
         }
 
         if (error.message === 'TEACHER_NOT_FOUND') {
-        return res.status(404).json({
-            message: 'El docente no existe'
-        });
+            return res.status(404).json({
+                message: 'El docente no existe'
+            });
         }
 
         if (error.message === 'COURSE_NOT_FOUND') {
-        return res.status(404).json({
-            message: 'El curso no existe'
-        });
+            return res.status(404).json({
+                message: 'El curso no existe'
+            });
         }
 
         if (error.message === 'SUBJECT_NOT_FOUND') {
-        return res.status(404).json({
-            message: 'La materia no existe'
-        });
+            return res.status(404).json({
+                message: 'La materia no existe'
+            });
         }
 
         if (error.message === 'SUBJECT_ALREADY_ASSIGNED') {
-        return res.status(400).json({
-            message:
-            'Ya existe un docente asignado a esa materia en ese curso'
-        });
+            return res.status(400).json({
+                message:'Ya existe un docente asignado a esa materia en ese curso'
+            });
         }
 
         res.status(500).json({
-        message: 'Error al actualizar la carga académica',
-        error: error.message
+            message: 'Error al actualizar la carga académica',
+            error: error.message
         });
 
     }

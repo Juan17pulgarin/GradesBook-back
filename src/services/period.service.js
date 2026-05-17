@@ -1,10 +1,7 @@
 import * as periodRepository from '../repositories/period.repository.js';
 
 export const createPeriod = async (periodData) => {
-    const existingPeriod =
-        await periodRepository.findPeriodByName(
-        periodData.nombre
-        );
+    const existingPeriod = await periodRepository.findPeriodByName(periodData.nombre);
 
     if (existingPeriod) {
         throw new Error('PERIOD_ALREADY_EXISTS');

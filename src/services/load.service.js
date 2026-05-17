@@ -70,9 +70,7 @@ export const updateAcademicLoad = async (id, data) => {
 
     /* Si existe pero es el mismo registro, entonces sí se permite actualizar.*/
 
-    if (
-        existingLoad &&
-        existingLoad.id !== parseInt(id)
+    if (existingLoad && existingLoad.id !== parseInt(id)
     ) {
         throw new Error('SUBJECT_ALREADY_ASSIGNED');
     }
