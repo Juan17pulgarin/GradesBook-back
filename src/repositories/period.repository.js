@@ -25,3 +25,20 @@ export const listPeriods = async () => {
         }
     });
 };
+
+export const countPeriodsByYear = async (year) => {
+    const startDate = new Date(`${year}-01-01`);
+    const endDate = new Date(`${year}-12-31`);
+
+    return await prisma.periodos.count({
+        where: {
+            fecha_inicio: {
+                gte: startDate
+            },
+
+            fecha_fin: {
+                lte: endDate
+            }
+        }
+    });
+};
