@@ -65,3 +65,29 @@ export const listUsersHandler = async (req, res) => {
     res.status(500).json({ message: 'Error al listar los usuarios', error: error.message });
   }
 };
+
+export const updateUserHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    delete updateData.id;
+    delete updateData.tipo;
+    delete updateData.activo;
+
+    const updatedUser = await userService.updateUser(id, updateData);
+    
+    res.json({
+      message: 'Usuario actualizado exitosamente',
+      user: updatedUser
+    });
+  } catch (error) {
+    if (error.message === 'USER_NOT_FOUND') {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+    if (error.message === 'DOCUMENT_EXISTS') {
+      return res.status(400).json({ message: 'El número de documento ya está registrado' });
+    }
+    res.status(500).json({ message: 'Error al actualizar el usuario', error: error.message });
+  }
+};

@@ -23,4 +23,10 @@ router.get('/',
   userController.listUsersHandler
 );
 
+router.put('/:id', 
+  validateToken, 
+  checkRole([ROLES.ADMIN]), 
+  userController.updateUserHandler
+);
+
 export default router;

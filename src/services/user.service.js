@@ -38,3 +38,24 @@ export const listUsers = async (currentUserRole, filterTipo) => {
 
   return await userRepository.listUsers(filterTipo);
 };
+
+export const updateUser = async (id, updateData) => {
+  const existingUser = await userRepository.findUserById(id);
+  
+  if (!existingUser) {
+    throw new Error('USER_NOT_FOUND');
+  }
+
+  if (updateData.documento && updateData.documento !== existingUser.documento) {
+    const docExists = await userRepository.findUserByDocumento(updateData.documento);
+    if (docExists) {
+      throw new Error('DOCUMENT_EXISTS');
+    }
+  }
+
+  if (updateData.password) {
+    delete updateData.password;
+  }
+
+  return await userRepository.updateUser(id, updateData);
+};

@@ -61,3 +61,27 @@ export const listUsers = async (tipo = null) => {
     }
   });
 };
+
+export const findUserById = async (id) => {
+  return await prisma.usuarios.findUnique({
+    where: { id: parseInt(id) }
+  });
+};
+
+export const updateUser = async (id, data) => {
+  return await prisma.usuarios.update({
+    where: { id: parseInt(id) },
+    data: data,
+    select: {
+      id: true,
+      nombres: true,
+      apellidos: true,
+      email: true,
+      tipo: true,
+      documento: true,
+      telefono: true,
+      direccion: true,
+      carnet: true
+    }
+  });
+};
