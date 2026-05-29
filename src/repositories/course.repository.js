@@ -6,23 +6,26 @@ export const createCourse = async (courseData) => {
       nombre: courseData.nombre,
       anio: parseInt(courseData.anio),
       capacidad_maxima: courseData.capacidad_maxima ? parseInt(courseData.capacidad_maxima) : null,
-      estado: courseData.estado
+      estado: courseData.estado,
+      institucion_id: parseInt(courseData.institucion_id) 
     }
   });
 };
 
-export const findCourseByNameAndYear = async (nombre, anio) => {
+export const findCourseByNameAndYear = async (nombre, anio, institucion_id) => {
   return await prisma.cursos.findFirst({
     where: {
       nombre: nombre,
-      anio: parseInt(anio)
+      anio: parseInt(anio),
+      institucion_id: parseInt(institucion_id) 
     }
   });
 };
 
-export const listCourses = async (anio = null) => {
+export const listCourses = async (anio = null, institucion_id) => {
   return await prisma.cursos.findMany({
     where: {
+      institucion_id: parseInt(institucion_id), 
       ...(anio && { anio: parseInt(anio) })
     },
     orderBy: [

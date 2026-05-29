@@ -17,7 +17,10 @@ export const createUserHandler = async (req, res) => {
       });
     }
 
-    const user = await userService.registerUser(req.body);
+    const user = await userService.registerUser({ 
+      ...req.body, 
+      institucion_id: req.user.institucion_id
+    });
     
     res.status(201).json({
       message: `${tipo.toLowerCase()} creado exitosamente`,
@@ -58,7 +61,7 @@ export const listUsersHandler = async (req, res) => {
     const { tipo } = req.query;
     const currentUserRole = req.user.role;
 
-    const users = await userService.listUsers(currentUserRole, tipo);
+    const users = await userService.listUsers(currentUserRole, tipo, req.user.institucion_id);
     
     res.json(users);
   } catch (error) {

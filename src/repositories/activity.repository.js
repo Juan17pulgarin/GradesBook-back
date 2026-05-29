@@ -13,19 +13,20 @@ export const createActivity = async (activityData) => {
     });
 };
 
-export const findAcademicLoadById = async (id) => {
-    return await prisma.carga_academica.findUnique({
+export const findAcademicLoadById = async (id, institucion_id) => {
+    return await prisma.carga_academica.findFirst({
         where: {
-            id: parseInt(id)
-        },
-
+            id: parseInt(id),
+            cursos: { institucion_id: parseInt(institucion_id) }
+        }
     });
 };
 
-export const findPeriodById = async (id) => {
-    return await prisma.periodos.findUnique({
+export const findPeriodById = async (id, institucion_id) => {
+    return await prisma.periodos.findFirst({
         where: {
-            id: parseInt(id)
+            id: parseInt(id),
+            institucion_id: parseInt(institucion_id)
         }
     });
 };
@@ -81,7 +82,6 @@ export const listActivitiesByStudent = async (estudiante_id) => {
     });
 };
 
-// Validar que el porcentaje total de las actividades no supere el 100% 
 export const getTotalPercentageByPeriod = async (carga_academica_id, periodo_id) => {
 
     const result = await prisma.actividades.aggregate({
@@ -98,7 +98,6 @@ export const getTotalPercentageByPeriod = async (carga_academica_id, periodo_id)
     return result._sum.porcentaje || 0;
 };
 
-// Validar que no se creen tareas con la misma información
 export const findActivityByName = async (nombre, carga_academica_id, periodo_id) => {
     return await prisma.actividades.findFirst({
         where: {

@@ -36,10 +36,13 @@ export const findExistingGrade = async (estudiante_id, actividad_id) => {
     });
 };
 
-export const findActivityById = async (actividad_id) => {
-    return await prisma.actividades.findUnique({
+export const findActivityById = async (actividad_id, institucion_id) => {
+    return await prisma.actividades.findFirst({
         where: {
-            id: parseInt(actividad_id)
+            id: parseInt(actividad_id),
+            carga_academica: {
+                cursos: { institucion_id: parseInt(institucion_id) }
+            }
         },
         include: {
             carga_academica: true

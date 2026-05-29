@@ -1,4 +1,5 @@
 import prisma from '../config/prisma.js';
+import { ROLES, ESTADOS_CURSO, ESTADOS_MATERIA } from '../utils/constants.js';
 
 export const createAcademicLoad = async (data) => {
     return await prisma.carga_academica.create({
@@ -20,43 +21,43 @@ export const findExistingAcademicLoad = async (docente_id, curso_id, materia_id)
     });
 };
 
-export const findTeacherById = async (id) => {
+export const findTeacherById = async (id, institucion_id) => {
     return await prisma.usuarios.findFirst({
         where: {
             id: parseInt(id),
-            tipo: 'DOCENTE',
-            activo: true
+            tipo: ROLES.DOCENTE,
+            activo: true,
+            institucion_id: parseInt(institucion_id)
         }
     });
 };
 
-export const findCourseById = async (id) => {
-    return await prisma.cursos.findUnique({
+export const findCourseById = async (id, institucion_id) => {
+    return await prisma.cursos.findFirst({
         where: {
             id: parseInt(id),
-            estado: 'ACTIVO'
+            estado: ESTADOS_CURSO.ACTIVO,
+            institucion_id: parseInt(institucion_id)
         }
     });
 };
 
-export const findSubjectById = async (id) => {
-    return await prisma.materias.findUnique({
+export const findSubjectById = async (id, institucion_id) => {
+    return await prisma.materias.findFirst({
         where: {
             id: parseInt(id),
-            estado: 'ACTIVA'
+            estado: ESTADOS_MATERIA.ACTIVA,
+            institucion_id: parseInt(institucion_id)
         }
     });
 };
 
-export const listAcademicLoads = async () => {
+export const listAcademicLoads = async (institucion_id) => {
     return await prisma.carga_academica.findMany({
+        where: { cursos: { institucion_id: parseInt(institucion_id) } },
         include: {
             usuarios: {
-                select: {
-                nombres: true,
-                apellidos: true,
-                email: true
-                }
+                select: { nombres: true, apellidos: true, email: true }
             },
             cursos: true,
             materias: true
@@ -64,12 +65,14 @@ export const listAcademicLoads = async () => {
     });
 };
 
-// Validar que no exista una carga académica con el mismo curso y materia para otro docente
-export const findAcademicLoadById = async (id) => {
-    return await prisma.carga_academica.findUnique({
-        where: {
-        id: parseInt(id)
-        }
+export const findAcademicLoadById = async (id, institucion_id) => {
+    const whereClause = { id: parseInt(id) };
+    if (institucion_id) {
+        whereClause.cursos = { institucion_id: parseInt(institucion_id) };
+    }
+
+    return await prisma.carga_academica.findFirst({
+        where: whereClause
     });
 };
 
@@ -83,7 +86,6 @@ export const findByCourseAndSubject = async (curso_id, materia_id) => {
 
 };
 
-// Actualizar una carga académica
 export const updateAcademicLoad = async (id, data) => {
     return await prisma.carga_academica.update({
         where: {

@@ -3,7 +3,10 @@ import * as gradeService from '../services/grade.service.js';
 export const createGradeHandler = async ( req, res) => {
     try {
 
-        const grade = await gradeService.createGrade(req.body, req.user.id);
+        const grade = await gradeService.createGrade({
+            ...req.body,
+            institucion_id: req.user.institucion_id 
+        }, req.user.id);
 
         res.status(201).json({
             message: 'Nota registrada exitosamente',

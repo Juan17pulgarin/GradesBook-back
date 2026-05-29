@@ -5,7 +5,8 @@ export const createPeriod = async (periodData) => {
         data: {
             nombre: periodData.nombre,
             fecha_inicio: new Date(periodData.fecha_inicio),
-            fecha_fin: new Date(periodData.fecha_fin)
+            fecha_fin: new Date(periodData.fecha_fin),
+            institucion_id: parseInt(periodData.institucion_id)
         }
     });
 };
@@ -13,13 +14,17 @@ export const createPeriod = async (periodData) => {
 export const findPeriodByName = async (nombre) => {
     return await prisma.periodos.findFirst({
         where: {
-            nombre
+            nombre,
+            institucion_id: parseInt(institucion_id)
         }
     });
 };
 
 export const listPeriods = async () => {
     return await prisma.periodos.findMany({
+        where: {
+            institucion_id: parseInt(institucion_id)
+        },
         orderBy: {
             fecha_inicio: 'asc'
         }
@@ -32,6 +37,7 @@ export const countPeriodsByYear = async (year) => {
 
     return await prisma.periodos.count({
         where: {
+            institucion_id: parseInt(institucion_id),
             fecha_inicio: {
                 gte: startDate
             },

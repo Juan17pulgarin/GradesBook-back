@@ -2,7 +2,10 @@ import * as periodService from '../services/period.service.js';
 
 export const createPeriodHandler = async (req, res) => {
     try {
-        const period = await periodService.createPeriod(req.body);
+        const period = await periodService.createPeriod({ 
+            ...req.body, 
+            institucion_id: req.user.institucion_id
+        });
 
         res.status(201).json({
             message: 'Periodo creado exitosamente',
@@ -50,8 +53,7 @@ export const createPeriodHandler = async (req, res) => {
 
 export const listPeriodsHandler = async (req, res) => {
     try {
-
-        const periods = await periodService.listPeriods();
+        const periods = await periodService.listPeriods(req.user.institucion_id);
         res.json(periods);
 
     } catch (error) {

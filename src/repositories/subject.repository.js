@@ -2,25 +2,35 @@ import prisma from '../config/prisma.js';
 
 export const findSubjectByName = async (nombre) => {
   return await prisma.materias.findFirst({
-    where: { nombre }
+    where: { 
+      nombre,
+      institucion_id: parseInt(institucion_id)
+    }
   });
 };
 
 export const findSubjectById = async (id) => {
-  return await prisma.materias.findUnique({
-    where: { id: parseInt(id) }
+  return await prisma.materias.findFirst({
+    where: { 
+      id: parseInt(id),
+      institucion_id: parseInt(institucion_id)
+   }
   });
 };
 
 export const createSubject = async (subjectData) => {
   return await prisma.materias.create({
-    data: subjectData
+    ...subjectData,
+    institucion_id: parseInt(subjectData.institucion_id)
   });
 };
 
-export const listSubjects = async (where = {}) => {
+export const listSubjects = async (where = {}, institucion_id) => {
   return await prisma.materias.findMany({
-    where,
+    where: {
+      ...where,
+      institucion_id: parseInt(institucion_id)
+    },
     orderBy: {
       nombre: 'asc'
     }

@@ -2,8 +2,10 @@ import * as enrollmentService from '../services/enrollment.service.js';
 
 export const createEnrollmentHandler = async (req, res) => {
     try {
-
-        const enrollment = await enrollmentService.createEnrollment(req.body);
+        const enrollment = await enrollmentService.createEnrollment({ 
+            ...req.body, 
+            institucion_id: req.user.institucion_id
+        });
 
         res.status(201).json({
             message: 'Matrícula creada exitosamente',
@@ -40,7 +42,7 @@ export const createEnrollmentHandler = async (req, res) => {
 export const listEnrollmentsHandler = async ( req, res) => {
     try {
 
-        const enrollments = await enrollmentService.listEnrollments();
+        const enrollments = await enrollmentService.listEnrollments(req.user.institucion_id);
 
         res.json(enrollments);
 

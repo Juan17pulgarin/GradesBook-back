@@ -9,7 +9,11 @@ export const createSubjectHandler = async (req, res) => {
       return res.status(400).json({ message: "El nombre de la materia es obligatorio" });
     }
 
-    const result = await subjectService.createAcademicStructure({ name, status });
+    const result = await subjectService.createAcademicStructure({ 
+      name, 
+      status, 
+      institucion_id: req.user.institucion_id
+    });
     
     res.status(201).json({
       message: "Estructura académica de la materia creada exitosamente",
@@ -24,7 +28,7 @@ export const createSubjectHandler = async (req, res) => {
 
 export const listSubjectsHandler = async (req, res) => {
   try {
-    const subjects = await subjectService.getSubjectsList();
+    const subjects = await subjectService.getSubjectsList(req.user.institucion_id);
     res.json(subjects);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener las materias", error: error.message });
