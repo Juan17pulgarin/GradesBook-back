@@ -6,8 +6,8 @@ import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
 import courseRoutes from './routes/course.routes.js';
 import subjectRoutes from './routes/subject.routes.js';
-import periodRoutes from './routes/period.routes.js'; //periodos
-import enrollmentRoutes from './routes/enrollment.routes.js'; //matriculas
+import periodRoutes from './routes/period.routes.js'; 
+import enrollmentRoutes from './routes/enrollment.routes.js';
 import academicLoadRoutes from './routes/load.routes.js';
 import activityRoutes from './routes/activity.routes.js';
 import gradeRoutes from './routes/grade.routes.js';
@@ -30,6 +30,19 @@ app.use('/api/v1/academic-loads', academicLoadRoutes);
 app.use('/api/v1/activities', activityRoutes);
 app.use('/api/v1/grades', gradeRoutes);
 app.use('/api/v1/institutions', institucionRoutes);
+
+app.get('/', (req, res) => {
+  res.status(200).json({ 
+    message: '¡Bienvenido a GradesBook API versión 1.0! 🚀' 
+  });
+});
+
+app.use('*', (req, res) => {
+  res.status(404).json({
+    error: 'Not Found',
+    message: '¡Bienvenido a GradesBook API versión 1.0! Sin embargo, la ruta que intentas consultar no existe.'
+  });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
