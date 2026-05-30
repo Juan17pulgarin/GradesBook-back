@@ -2,13 +2,13 @@ import * as academicLoadRepository from '../repositories/load.repository.js';
 
 export const createAcademicLoad = async (data) => {
 
-    const teacher = await academicLoadRepository.findTeacherById(data.docente_id, institucion_id);
+    const teacher = await academicLoadRepository.findTeacherById(data.docente_id, data.institucion_id);
     if (!teacher) throw new Error('TEACHER_NOT_FOUND');
 
-    const course = await academicLoadRepository.findCourseById(data.curso_id, institucion_id);
+    const course = await academicLoadRepository.findCourseById(data.curso_id, data.institucion_id);
     if (!course) throw new Error('COURSE_NOT_FOUND');
 
-    const subject = await academicLoadRepository.findSubjectById(data.materia_id, institucion_id);
+    const subject = await academicLoadRepository.findSubjectById(data.materia_id, data.institucion_id);
     if (!subject) throw new Error('SUBJECT_NOT_FOUND');
 
     const existingLoad = await academicLoadRepository.findByCourseAndSubject(data.curso_id, data.materia_id);
@@ -29,12 +29,11 @@ export const updateAcademicLoad = async (id, data) => {
         throw new Error('ACADEMIC_LOAD_NOT_FOUND');
     }
 
-    // usar datos actuales si no vienen nuevos
     const docente_id = data.docente_id || academicLoad.docente_id;
     const curso_id = data.curso_id || academicLoad.curso_id;
     const materia_id = data.materia_id || academicLoad.materia_id;
 
-    const institucion_id = data.institucion_id || null;
+    const institucion_id = data.institucion_id;
 
     const teacher = await academicLoadRepository.findTeacherById(docente_id, institucion_id);
     if (!teacher && data.docente_id) throw new Error('TEACHER_NOT_FOUND');

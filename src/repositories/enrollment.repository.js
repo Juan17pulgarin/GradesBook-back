@@ -9,21 +9,22 @@ export const createEnrollment = async (data) => {
     });
 };
 
-export const findStudentById = async (id) => {
+export const findStudentById = async (id, institucion_id) => {
     return await prisma.usuarios.findFirst({
         where: {
             id: parseInt(id),
             tipo: 'ESTUDIANTE',
-            activo: true, 
+            activo: true,
             institucion_id: parseInt(institucion_id)
         }
     });
 };
 
-export const findCourseById = async (id) => {
-    return await prisma.cursos.findUnique({
+export const findCourseById = async (id, institucion_id) => {
+    return await prisma.cursos.findFirst({
         where: {
-            id: parseInt(id)
+            id: parseInt(id),
+            institucion_id: parseInt(institucion_id)
         }
     });
 };

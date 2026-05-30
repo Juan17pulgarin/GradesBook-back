@@ -11,6 +11,7 @@ import enrollmentRoutes from './routes/enrollment.routes.js'; //matriculas
 import academicLoadRoutes from './routes/load.routes.js';
 import activityRoutes from './routes/activity.routes.js';
 import gradeRoutes from './routes/grade.routes.js';
+import institucionRoutes from './routes/institution.routes.js';
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use('/api/v1/enrollments', enrollmentRoutes);
 app.use('/api/v1/academic-loads', academicLoadRoutes);
 app.use('/api/v1/activities', activityRoutes);
 app.use('/api/v1/grades', gradeRoutes);
+app.use('/api/v1/institutions', institucionRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

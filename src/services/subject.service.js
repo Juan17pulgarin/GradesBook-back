@@ -1,8 +1,8 @@
 import * as subjectRepository from '../repositories/subject.repository.js';
 import { ESTADOS_MATERIA } from '../utils/constants.js';
 
-export const createAcademicStructure = async (subjectData, institucion_id) => {
-  const existingSubject = await subjectRepository.findSubjectByName(subjectData.name, institucion_id);
+export const createAcademicStructure = async (subjectData) => {
+  const existingSubject = await subjectRepository.findSubjectByName(subjectData.name, subjectData.institucion_id);
 
   if (existingSubject) {
     throw new Error('SUBJECT_ALREADY_EXISTS');
@@ -10,7 +10,7 @@ export const createAcademicStructure = async (subjectData, institucion_id) => {
 
   const newSubject = {
     nombre: subjectData.name,
-    institucion_id,
+    institucion_id: subjectData.institucion_id,
     estado: subjectData.status || ESTADOS_MATERIA.ACTIVA
   };
 

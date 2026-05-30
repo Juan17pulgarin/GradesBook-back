@@ -1,8 +1,8 @@
 import * as periodRepository from '../repositories/period.repository.js';
 
-export const createPeriod = async (periodData, institucion_id) => {
+export const createPeriod = async (periodData) => {
 
-    const existingPeriod = await periodRepository.findPeriodByName(periodData.nombre, institucion_id);
+    const existingPeriod = await periodRepository.findPeriodByName(periodData.nombre, periodData.institucion_id);
 
     if (existingPeriod) {
         throw new Error('PERIOD_ALREADY_EXISTS');
@@ -16,7 +16,7 @@ export const createPeriod = async (periodData, institucion_id) => {
     }
 
     const year = startDate.getFullYear();
-    const totalPeriods = await periodRepository.countPeriodsByYear(year, institucion_id);
+    const totalPeriods = await periodRepository.countPeriodsByYear(year, periodData.institucion_id);
 
     if (totalPeriods >= 4) {
         throw new Error('MAX_PERIODS_EXCEEDED');
@@ -33,12 +33,9 @@ export const createPeriod = async (periodData, institucion_id) => {
         throw new Error('PERIOD_TOO_LONG');
     }
 
-    return await periodRepository.createPeriod({
-        ...periodData,
-        institucion_id 
-    });
+    return await periodRepository.createPeriod(periodData);
 };
 
-export const listPeriods = async () => {
-    return await periodRepository.listPeriods();
+export const listPeriods = async (institucion_id) => {
+    return await periodRepository.listPeriods(institucion_id);
 };

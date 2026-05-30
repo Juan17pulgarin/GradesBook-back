@@ -11,7 +11,7 @@ export const createPeriod = async (periodData) => {
     });
 };
 
-export const findPeriodByName = async (nombre) => {
+export const findPeriodByName = async (nombre, institucion_id) => {
     return await prisma.periodos.findFirst({
         where: {
             nombre,
@@ -20,7 +20,7 @@ export const findPeriodByName = async (nombre) => {
     });
 };
 
-export const listPeriods = async () => {
+export const listPeriods = async (institucion_id) => {
     return await prisma.periodos.findMany({
         where: {
             institucion_id: parseInt(institucion_id)
@@ -31,7 +31,7 @@ export const listPeriods = async () => {
     });
 };
 
-export const countPeriodsByYear = async (year) => {
+export const countPeriodsByYear = async (year, institucion_id) => {
     const startDate = new Date(`${year}-01-01`);
     const endDate = new Date(`${year}-12-31`);
 
@@ -41,7 +41,6 @@ export const countPeriodsByYear = async (year) => {
             fecha_inicio: {
                 gte: startDate
             },
-
             fecha_fin: {
                 lte: endDate
             }

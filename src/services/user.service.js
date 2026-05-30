@@ -2,8 +2,8 @@ import * as userRepository from '../repositories/user.repository.js';
 import bcrypt from 'bcrypt';
 import { ROLES } from '../utils/constants.js';
 
-export const registerUser = async (userData, institucion_id) => {
-  const existingUser = await userRepository.findUserByDocumento(userData.documento, institucion_id);
+export const registerUser = async (userData) => {
+  const existingUser = await userRepository.findUserByDocumento(userData.documento, userData.institucion_id);
   if (existingUser) {
     throw new Error('DOCUMENT_EXISTS');
   }
@@ -13,7 +13,6 @@ export const registerUser = async (userData, institucion_id) => {
 
   return await userRepository.createUser({
     ...userData,
-    institucion_id,
     password: hashedPassword
   });
 };

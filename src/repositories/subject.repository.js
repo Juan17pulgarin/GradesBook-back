@@ -1,27 +1,30 @@
 import prisma from '../config/prisma.js';
 
-export const findSubjectByName = async (nombre) => {
+export const findSubjectByName = async (nombre, institucion_id) => {
   return await prisma.materias.findFirst({
-    where: { 
+    where: {
       nombre,
       institucion_id: parseInt(institucion_id)
     }
   });
 };
 
-export const findSubjectById = async (id) => {
+export const findSubjectById = async (id, institucion_id) => {
   return await prisma.materias.findFirst({
-    where: { 
+    where: {
       id: parseInt(id),
       institucion_id: parseInt(institucion_id)
-   }
+    }
   });
 };
 
 export const createSubject = async (subjectData) => {
   return await prisma.materias.create({
-    ...subjectData,
-    institucion_id: parseInt(subjectData.institucion_id)
+    data: {
+      nombre: subjectData.nombre,
+      estado: subjectData.estado,
+      institucion_id: parseInt(subjectData.institucion_id)
+    }
   });
 };
 
@@ -39,14 +42,13 @@ export const listSubjects = async (where = {}, institucion_id) => {
 
 export const listSubjectsByStudent = async (estudiante_id) => {
     const enrollments = await prisma.matriculas.findMany({
-            where: {
-                estudiante_id: parseInt(estudiante_id)
-            },
-
-            select: {
-                curso_id: true
-            }
-        });
+        where: {
+            estudiante_id: parseInt(estudiante_id)
+        },
+        select: {
+            curso_id: true
+        }
+    });
 
     const courseIds = enrollments.map(enrollment => enrollment.curso_id);
 
@@ -56,7 +58,6 @@ export const listSubjectsByStudent = async (estudiante_id) => {
                 in: courseIds
             }
         },
-
         include: {
             materias: true,
             cursos: true,

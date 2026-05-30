@@ -49,7 +49,7 @@ export const listStudentSubjectsHandler = async (req, res) => {
 export const deleteSubjectHandler = async (req, res) => {
   try {
     const { id } = req.params;
-    await subjectService.disableSubject(id);
+    await subjectService.disableSubject(id, req.user.institucion_id);
     res.json({ message: "Materia eliminada exitosamente" });
   } catch (error) {
     const statusCode = error.message === 'SUBJECT_NOT_FOUND' ? 404 : 500;

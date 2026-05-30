@@ -63,7 +63,7 @@ export const updateAcademicLoadHandler = async (req, res) => {
     try {
 
         const { id } = req.params;
-        const updatedAcademicLoad = await academicLoadService.updateAcademicLoad(id, req.body);
+        const updatedAcademicLoad = await academicLoadService.updateAcademicLoad(id, { ...req.body, institucion_id: req.user.institucion_id });
 
         res.json({
             message:'Carga académica actualizada exitosamente',

@@ -1,11 +1,11 @@
 import * as courseRepository from '../repositories/course.repository.js';
 import { ESTADOS_CURSO } from '../utils/constants.js';
 
-export const createCourse = async (courseData, institucion_id) => {
+export const createCourse = async (courseData) => {
   const existingCourse = await courseRepository.findCourseByNameAndYear(
-    courseData.nombre, 
+    courseData.nombre,
     courseData.anio,
-    institucion_id 
+    courseData.institucion_id
   );
 
   if (existingCourse) {
@@ -14,7 +14,6 @@ export const createCourse = async (courseData, institucion_id) => {
 
   const newCourse = {
     ...courseData,
-    institucion_id, 
     estado: courseData.estado || ESTADOS_CURSO.ACTIVO
   };
 

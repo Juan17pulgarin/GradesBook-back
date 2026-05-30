@@ -10,6 +10,12 @@ export const findUserByDocumento = async (documento, institucion_id) => {
   });
 };
 
+export const findUserByDocumentoGlobal = async (documento) => {
+  return await prisma.usuarios.findFirst({
+    where: { documento }
+  });
+};
+
 export const findUserForLogin = async (documento) => {
   return await prisma.usuarios.findFirst({
     where: {
