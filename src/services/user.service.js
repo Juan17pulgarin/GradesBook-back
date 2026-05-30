@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { ROLES } from '../utils/constants.js';
 
 export const registerUser = async (userData) => {
-  const existingUser = await userRepository.findUserByDocumento(userData.documento);
+  const existingUser = await userRepository.findUserByDocumento(userData.documento, userData.institucion_id);
   if (existingUser) {
     throw new Error('DOCUMENT_EXISTS');
   }
@@ -31,23 +31,23 @@ export const deleteUser = async (targetId, adminId) => {
   return updatedUser;
 };
 
-export const listUsers = async (currentUserRole, filterTipo) => {
+export const listUsers = async (currentUserRole, filterTipo, institucion_id) => {
   if (currentUserRole ===  ROLES.DOCENTE) {
-    return await userRepository.listUsers(ROLES.ESTUDIANTE);
+    return await userRepository.listUsers(ROLES.ESTUDIANTE, institucion_id);
   }
 
-  return await userRepository.listUsers(filterTipo);
+  return await userRepository.listUsers(filterTipo, institucion_id);
 };
 
-export const updateUser = async (id, updateData) => {
-  const existingUser = await userRepository.findUserById(id);
+export const updateUser = async (id, updateData, institucion_id) => {
+  const existingUser = await userRepository.findUserById(id, institucion_id);
   
   if (!existingUser) {
     throw new Error('USER_NOT_FOUND');
   }
 
   if (updateData.documento && updateData.documento !== existingUser.documento) {
-    const docExists = await userRepository.findUserByDocumento(updateData.documento);
+    const docExists = await userRepository.findUserByDocumento(updateData.documento, institucion_id);
     if (docExists) {
       throw new Error('DOCUMENT_EXISTS');
     }

@@ -1,6 +1,22 @@
 import prisma from '../config/prisma.js';
 
-export const findUserByDocumento = async (documento) => {
+export const findUserByDocumento = async (documento, institucion_id) => {
+  return await prisma.usuarios.findFirst({
+    where: {
+      documento: documento,
+      institucion_id: parseInt(institucion_id),
+      activo: true
+    }
+  });
+};
+
+export const findUserByDocumentoGlobal = async (documento) => {
+  return await prisma.usuarios.findFirst({
+    where: { documento }
+  });
+};
+
+export const findUserForLogin = async (documento) => {
   return await prisma.usuarios.findFirst({
     where: {
       documento: documento,
@@ -18,7 +34,8 @@ export const createUser = async (userData) => {
       password: userData.password,
       tipo: userData.tipo,
       documento: userData.documento,
-      telefono: userData.telefono
+      telefono: userData.telefono,
+      institucion_id: parseInt(userData.institucion_id) 
     },
     select: {
       id: true,
@@ -42,10 +59,11 @@ export const deleteUser = async (id, status) => {
   });
 };
 
-export const listUsers = async (tipo = null) => {
+export const listUsers = async (tipo = null, institucion_id) => {
   return await prisma.usuarios.findMany({
     where: {
       activo: true,
+      institucion_id: parseInt(institucion_id), 
       ...(tipo && { tipo: tipo })
     },
     select: {
@@ -62,9 +80,23 @@ export const listUsers = async (tipo = null) => {
   });
 };
 
-export const findUserById = async (id) => {
-  return await prisma.usuarios.findUnique({
-    where: { id: parseInt(id) }
+export const findUserById = async (id, institucion_id) => {
+  return await prisma.usuarios.findFirst({ 
+    where: { 
+      id: parseInt(id),
+      institucion_id: parseInt(institucion_id) 
+    },
+    select: {
+      id: true,
+      nombres: true,
+      apellidos: true,
+      email: true,
+      tipo: true,
+      documento: true,
+      telefono: true,
+      direccion: true,
+      carnet: true
+    }
   });
 };
 

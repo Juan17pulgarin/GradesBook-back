@@ -3,8 +3,9 @@ import { ESTADOS_CURSO } from '../utils/constants.js';
 
 export const createCourse = async (courseData) => {
   const existingCourse = await courseRepository.findCourseByNameAndYear(
-    courseData.nombre, 
-    courseData.anio
+    courseData.nombre,
+    courseData.anio,
+    courseData.institucion_id
   );
 
   if (existingCourse) {
@@ -19,6 +20,6 @@ export const createCourse = async (courseData) => {
   return await courseRepository.createCourse(newCourse);
 };
 
-export const listCourses = async (anio) => {
-  return await courseRepository.listCourses(anio);
+export const listCourses = async (anio, institucion_id) => {
+  return await courseRepository.listCourses(anio, institucion_id);
 };

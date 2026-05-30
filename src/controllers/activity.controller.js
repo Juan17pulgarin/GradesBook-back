@@ -3,11 +3,10 @@ from '../services/activity.service.js';
 
 export const createActivityHandler = async (req, res) => {
     try {
-        const activity =
-        await activityService.createActivity(
-            req.body,
-            req.user.id
-        );
+       const activity = await activityService.createActivity({
+            ...req.body,
+            institucion_id: req.user.institucion_id
+        }, req.user.id);
 
         res.status(201).json({
         message: 'Actividad creada exitosamente',

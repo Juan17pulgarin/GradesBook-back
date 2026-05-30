@@ -2,7 +2,10 @@ import * as courseService from '../services/course.service.js';
 
 export const createCourseHandler = async (req, res) => {
   try {
-    const course = await courseService.createCourse(req.body);
+    const course = await courseService.createCourse({ 
+      ...req.body, 
+      institucion_id: req.user.institucion_id
+    });
     
     res.status(201).json({
       message: 'Estructura académica (curso) creada exitosamente',
@@ -24,7 +27,7 @@ export const createCourseHandler = async (req, res) => {
 export const listCoursesHandler = async (req, res) => {
   try {
     const { anio } = req.query;
-    const courses = await courseService.listCourses(anio);
+    const courses = await courseService.listCourses(anio, req.user.institucion_id);
     
     res.json(courses);
   } catch (error) {

@@ -2,7 +2,10 @@ import * as academicLoadService from '../services/load.service.js';
 
 export const createAcademicLoadHandler = async (req, res) => {
     try {
-        const academicLoad =await academicLoadService.createAcademicLoad(req.body);
+        const academicLoad = await academicLoadService.createAcademicLoad({ 
+            ...req.body, 
+            institucion_id: req.user.institucion_id
+        });
 
         res.status(201).json({
         message: 'Carga académica creada exitosamente',
@@ -44,7 +47,7 @@ export const createAcademicLoadHandler = async (req, res) => {
 export const listAcademicLoadsHandler = async (req, res) => {
     try {
 
-        const academicLoads = await academicLoadService.listAcademicLoads();
+        const academicLoads = await academicLoadService.listAcademicLoads(req.user.institucion_id);
         res.json(academicLoads);
 
     } catch (error) {
@@ -60,7 +63,7 @@ export const updateAcademicLoadHandler = async (req, res) => {
     try {
 
         const { id } = req.params;
-        const updatedAcademicLoad = await academicLoadService.updateAcademicLoad(id, req.body);
+        const updatedAcademicLoad = await academicLoadService.updateAcademicLoad(id, { ...req.body, institucion_id: req.user.institucion_id });
 
         res.json({
             message:'Carga académica actualizada exitosamente',
