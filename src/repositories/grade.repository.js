@@ -59,6 +59,16 @@ export const findEnrollment = async (estudiante_id, curso_id) => {
     });
 };
 
+export const findAcademicLoadById = async (carga_academica_id) => {
+
+    return await prisma.carga_academica.findUnique({
+        where: {
+            id: parseInt(carga_academica_id)
+        }
+    });
+
+};
+
 export const listGradesByActivity = async (actividad_id) => {
     return await prisma.notas.findMany({
         where: {
@@ -93,6 +103,80 @@ export const listGradesByStudent = async (estudiante_id) => {
                     }
                 }
             }
+        }
+    });
+};
+
+export const getStudentAverage = async (estudiante_id, carga_academica_id, periodo_id) => {
+
+    const grades = await prisma.notas.findMany({
+        where: {
+            estudiante_id: parseInt(estudiante_id),
+            actividades: {
+                carga_academica_id: parseInt(carga_academica_id),
+                periodo_id: parseInt(periodo_id)
+            }
+        },
+
+        include: {
+            actividades: true
+        }
+    });
+
+    return grades;
+};
+
+export const getStudentGradesForAverageByPeriod = async (estudiante_id, periodo_id) => {
+    return await prisma.notas.findMany({
+        where: {
+            estudiante_id: parseInt(estudiante_id),
+            actividades: {
+                periodo_id: parseInt(periodo_id)
+            }
+        },
+        include: {
+            actividades: {
+                include: {
+                    periodos: true,
+                    carga_academica: {
+                        include: {
+                            materias: true
+                        }
+                    }
+                }
+            }
+        }
+    });
+};
+
+export const getStudentGradesForGeneralAverage = async (estudiante_id) => {
+    return await prisma.notas.findMany({
+        where: {
+            estudiante_id: parseInt(estudiante_id)
+        },
+        include: {
+            actividades: {
+                include: {
+                    periodos: true,
+                    carga_academica: {
+                        include: {
+                            materias: true
+                        }
+                    }
+                }
+            }
+        }
+    });
+};
+
+export const updateGrade = async (id, gradeData) => {
+    return await prisma.notas.update({
+        where: {
+            id: parseInt(id)
+        },
+        data: {
+            nota: gradeData.nota,
+            observacion: gradeData.observacion
         }
     });
 };

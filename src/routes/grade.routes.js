@@ -26,6 +26,34 @@ router.get(
     gradeController.listStudentGradesHandler
 );
 
+router.get(
+    '/average/:estudiante_id/:carga_academica_id/:periodo_id',
+    validateToken,
+    checkRole([ROLES.DOCENTE]),
+    gradeController.calculateStudentAverageHandler
+);
+
+router.get(
+    '/my-average/period/:periodo_id',
+    validateToken,
+    checkRole([ROLES.ESTUDIANTE]),
+    gradeController.myGeneralAverageByPeriodHandler
+);
+
+router.get(
+    '/my-average',
+    validateToken,
+    checkRole([ROLES.ESTUDIANTE]),
+    gradeController.myGeneralAverageHandler
+);
+
+router.patch(
+    '/:id',
+    validateToken,
+    checkRole([ROLES.DOCENTE]),
+    gradeController.updateGradeHandler
+);
+
 router.delete(
     '/:id',
     validateToken,

@@ -11,15 +11,6 @@ export const createPeriod = async (periodData) => {
     });
 };
 
-export const findPeriodByName = async (nombre, institucion_id) => {
-    return await prisma.periodos.findFirst({
-        where: {
-            nombre,
-            institucion_id: parseInt(institucion_id)
-        }
-    });
-};
-
 export const listPeriods = async (institucion_id) => {
     return await prisma.periodos.findMany({
         where: {
@@ -44,6 +35,41 @@ export const countPeriodsByYear = async (year, institucion_id) => {
             fecha_fin: {
                 lte: endDate
             }
+        }
+    });
+};
+
+export const findOverlappingPeriod = async (fecha_inicio, fecha_fin, institucion_id, excludeId = null) => {
+    return await prisma.periodos.findFirst({
+        where: {
+            institucion_id: parseInt(institucion_id),
+            ...(excludeId && { id: { not: parseInt(excludeId) } }), 
+            OR: [
+                {
+                    fecha_inicio: { lte: new Date(fecha_fin) },
+                    fecha_fin: { gte: new Date(fecha_inicio) }
+                }
+            ]
+        }
+    });
+};
+
+export const updatePeriod = async (id, periodData) => {
+    return await prisma.periodos.update({
+        where: {
+            id: parseInt(id)
+        },
+        data: {
+            fecha_inicio: new Date(periodData.fecha_inicio),
+            fecha_fin: new Date(periodData.fecha_fin)
+        }
+    });
+};
+
+export const findPeriodById = async (id) => {
+    return await prisma.periodos.findUnique({
+        where: {
+            id: parseInt(id)
         }
     });
 };

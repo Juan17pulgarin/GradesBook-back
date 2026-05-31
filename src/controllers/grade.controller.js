@@ -80,7 +80,7 @@ export const listGradesByActivityHandler = async (req, res) => {
 
 export const listStudentGradesHandler = async (req, res) => {
     try {
-
+        
         const grades = await gradeService.listGradesByStudent(req.user.id);
 
         res.json(grades);
@@ -89,6 +89,108 @@ export const listStudentGradesHandler = async (req, res) => {
 
         res.status(500).json({
             message:'Error al listar notas',
+            error: error.message
+        });
+    }
+};
+
+export const calculateStudentAverageHandler = async (req, res) => {
+    try {
+
+        const result = await gradeService.calculateStudentAverage(
+                req.params.estudiante_id,
+                req.params.carga_academica_id,
+                req.params.periodo_id,
+                req.user.id
+            );
+
+        res.json(result);
+
+    } catch (error) {
+
+        if (error.message === 'NO_GRADES_FOUND') {
+            return res.status(404).json({
+                message: 'No existen notas para calcular el promedio'
+            });
+        }
+
+        if (error.message === 'UNAUTHORIZED_ACADEMIC_LOAD') {
+            return res.status(403).json({
+                message: 'No puedes consultar esta carga académica'
+            });
+        }
+
+        if (error.message === 'ACADEMIC_LOAD_NOT_FOUND') {
+            return res.status(404).json({
+                message: 'La carga académica no existe'
+            });
+        }
+
+        if (error.message === 'STUDENT_NOT_ENROLLED') {
+            return res.status(400).json({
+                message: 'El estudiante no pertenece al curso'
+            });
+        }
+
+        res.status(500).json({
+            message: 'Error al calcular promedio',
+            error: error.message
+        });
+
+    }
+};
+
+export const myGeneralAverageByPeriodHandler = async (req, res) => {
+    try {
+        const estudiante_id = req.user.id;
+        const { periodo_id } = req.params;
+
+        const result = await gradeService.getGeneralAverageByPeriod(estudiante_id, periodo_id);
+        res.json(result);
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const myGeneralAverageHandler = async (req, res) => {
+    try {
+        const result = await gradeService.getGeneralAverage(req.user.id);
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const updateGradeHandler = async (req, res) => {
+    try {
+        const grade = await gradeService.updateGrade(
+            req.params.id,
+            req.body,
+            req.user.id
+        );
+
+        res.json({
+            message: 'Nota actualizada exitosamente',
+            grade
+        });
+
+    } catch (error) {
+
+        if (error.message === 'GRADE_NOT_FOUND') {
+            return res.status(404).json({
+                message: 'La nota no existe'
+            });
+        }
+
+        if (error.message === 'UNAUTHORIZED_GRADE') {
+            return res.status(403).json({
+                message: 'No puedes modificar esta nota'
+            });
+        }
+
+        res.status(500).json({
+            message: 'Error al actualizar la nota',
             error: error.message
         });
     }

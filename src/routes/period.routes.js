@@ -19,4 +19,11 @@ router.get(
     periodController.listPeriodsHandler
 );
 
+router.patch(
+    '/:id',
+    validateToken,
+    checkRole([ROLES.ADMIN]),
+    periodController.updatePeriodHandler
+);
+
 export default router;
