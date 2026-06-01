@@ -78,7 +78,7 @@ export const updateUserHandler = async (req, res) => {
     delete updateData.tipo;
     delete updateData.activo;
 
-    const updatedUser = await userService.updateUser(id, updateData);
+    const updatedUser = await userService.updateUser(id, updateData, req.user.institucion_id);
     
     res.json({
       message: 'Usuario actualizado exitosamente',
