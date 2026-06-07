@@ -71,6 +71,21 @@ export const listSubjectsByStudent = async (estudiante_id) => {
     });
 };
 
+export const listSubjectsWithoutAcademicLoad = async (institucion_id) => {
+  return await prisma.materias.findMany({
+    where: {
+      institucion_id: parseInt(institucion_id),
+      estado: 'ACTIVA',
+      carga_academica: {
+        none: {}
+      }
+    },
+    orderBy: {
+      nombre: 'asc'
+    }
+  });
+};
+
 export const updateSubject = async (id, subjectData) => {
   return await prisma.materias.update({
     where: { id: parseInt(id) },

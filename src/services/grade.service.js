@@ -46,6 +46,32 @@ export const listGradesByStudent = async (estudiante_id) => {
     return await gradeRepository.listGradesByStudent(estudiante_id);
 };
 
+export const getSchoolAverage = async (institucion_id) => {
+    const students = await gradeRepository.getStudentsBySchool(institucion_id);
+
+    if (students.length === 0) {
+        return { promedio_general: 0, estado: 'SIN_NOTAS' };
+    }
+
+    const averages = await Promise.all(
+        students.map(student => getGeneralAverage(student.id))
+    );
+
+    // Filtra estudiantes sin notas
+    const withGrades = averages.filter(a => a.estado !== 'SIN_NOTAS');
+
+    if (withGrades.length === 0) {
+        return { promedio_general: 0, estado: 'SIN_NOTAS' };
+    }
+
+    const total = withGrades.reduce((sum, a) => sum + a.promedio_general, 0);
+    const promedioGeneral = total / withGrades.length;
+
+    return {
+        promedio_general: Number(promedioGeneral.toFixed(2))
+    };
+};
+
 export const calculateStudentAverage = async (estudiante_id, carga_academica_id, periodo_id, docente_id) => {
 
     const academicLoad = await gradeRepository.findAcademicLoadById(carga_academica_id);

@@ -24,6 +24,13 @@ router.get(
   subjectController.listStudentSubjectsHandler
 );
 
+router.get(
+  '/available',
+  validateToken,
+  checkRole([ROLES.ADMIN]),
+  subjectController.listSubjectsWithoutAcademicLoadHandler
+);
+
 router.patch('/:id', 
   validateToken, 
   checkRole([ROLES.ADMIN]), 

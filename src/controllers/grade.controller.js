@@ -94,6 +94,15 @@ export const listStudentGradesHandler = async (req, res) => {
     }
 };
 
+export const schoolAverageHandler = async (req, res) => {
+    try {
+        const result = await gradeService.getSchoolAverage(req.user.institucion_id);
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export const calculateStudentAverageHandler = async (req, res) => {
     try {
 

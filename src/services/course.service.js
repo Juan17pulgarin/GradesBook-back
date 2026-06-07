@@ -1,4 +1,5 @@
 import * as courseRepository from '../repositories/course.repository.js';
+import * as subjectRepository from '../repositories/subject.repository.js';
 import { ESTADOS_CURSO } from '../utils/constants.js';
 
 export const createCourse = async (courseData) => {
@@ -22,4 +23,15 @@ export const createCourse = async (courseData) => {
 
 export const listCourses = async (anio, institucion_id) => {
   return await courseRepository.listCourses(anio, institucion_id);
+};
+
+export const getAvailableCoursesForSubject = async (materia_id, institucion_id) => {
+
+  const subject = await subjectRepository.findSubjectById(materia_id, institucion_id);
+
+  if (!subject) {
+    throw new Error('SUBJECT_NOT_FOUND');
+  }
+
+  return await courseRepository.getAvailableCoursesForSubject(materia_id, institucion_id);
 };

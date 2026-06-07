@@ -17,4 +17,11 @@ router.get('/',
   courseController.listCoursesHandler
 );
 
+router.get(
+  '/available/:materia_id',
+  validateToken,
+  checkRole([ROLES.ADMIN]),
+  courseController.getAvailableCoursesForSubjectHandler
+);
+
 export default router;
