@@ -19,6 +19,20 @@ router.get(
     academicLoadController.listAcademicLoadsHandler
 );
 
+router.get(
+    '/:carga_academica_id/students',
+    validateToken,
+    checkRole([ROLES.DOCENTE]),
+    academicLoadController.listStudentsByAcademicLoadHandler
+);
+
+router.get(
+    '/my-loads',
+    validateToken,
+    checkRole([ROLES.DOCENTE]),
+    academicLoadController.listMyAcademicLoadsHandler
+);
+
 router.patch(
     '/:id',
     validateToken,

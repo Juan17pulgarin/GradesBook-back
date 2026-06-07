@@ -59,6 +59,57 @@ export const listAcademicLoadsHandler = async (req, res) => {
     }
 };
 
+export const listStudentsByAcademicLoadHandler = async (req, res) => {
+
+    try {
+
+        const students = await academicLoadService.listStudentsByAcademicLoad(
+                    req.params.carga_academica_id,
+                    req.user.id
+                );
+
+        res.json(students);
+
+    } catch (error) {
+
+        if (error.message === 'ACADEMIC_LOAD_NOT_FOUND') {
+            return res.status(404).json({
+                message: 'La carga académica no existe'
+            });
+        }
+
+        if (error.message === 'UNAUTHORIZED_ACADEMIC_LOAD') {
+            return res.status(403).json({
+                message:'No puedes consultar esta carga académica'
+            });
+        }
+
+        res.status(500).json({
+            message: 'Error al listar estudiantes',
+            error: error.message
+        });
+
+    }
+};
+
+export const listMyAcademicLoadsHandler = async (req, res) => {
+
+    try {
+
+        const academicLoads = await academicLoadService.listAcademicLoadsByTeacher(req.user.id);
+        res.json(academicLoads);
+
+    } catch (error) {
+
+        res.status(500).json({
+            message:'Error al listar cargas académicas',
+            error: error.message
+        });
+
+    }
+
+};
+
 export const updateAcademicLoadHandler = async (req, res) => {
     try {
 

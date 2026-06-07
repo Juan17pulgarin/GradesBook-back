@@ -62,3 +62,40 @@ export const getAvailableCoursesForSubjectHandler = async (req, res) => {
     });
   }
 };
+
+export const updateCourseHandler = async (req, res) => {
+  try {
+
+    const { id } = req.params;
+
+    const course = await courseService.updateCourse(
+        id,
+        req.body,
+        req.user.institucion_id
+      );
+
+    res.json({
+      message: 'Curso actualizado exitosamente',
+      course
+    });
+
+  } catch (error) {
+
+    if (error.message === 'COURSE_NOT_FOUND') {
+      return res.status(404).json({
+        message: 'El curso no existe'
+      });
+    }
+
+    if (error.message === 'COURSE_ALREADY_EXISTS') {
+      return res.status(400).json({
+        message:'Ya existe un curso con ese nombre para ese año'
+      });
+    }
+
+    res.status(500).json({
+      message: 'Error al actualizar curso',
+      error: error.message
+    });
+  }
+};

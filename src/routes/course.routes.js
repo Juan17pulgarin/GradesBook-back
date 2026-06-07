@@ -24,4 +24,11 @@ router.get(
   courseController.getAvailableCoursesForSubjectHandler
 );
 
+router.patch(
+  '/:id',
+  validateToken,
+  checkRole([ROLES.ADMIN]),
+  courseController.updateCourseHandler
+);
+
 export default router;

@@ -35,3 +35,28 @@ export const getAvailableCoursesForSubject = async (materia_id, institucion_id) 
 
   return await courseRepository.getAvailableCoursesForSubject(materia_id, institucion_id);
 };
+
+export const updateCourse = async (id, courseData, institucion_id) => {
+
+  const course = await courseRepository.findCourseById(id, institucion_id);
+
+  if (!course) {
+    throw new Error('COURSE_NOT_FOUND');
+  }
+
+  // Si cambia nombre o año validar duplicado
+  const nombre = courseData.nombre || course.nombre;
+  const anio = courseData.anio || course.anio;
+
+  const existingCourse = await courseRepository.findCourseByNameAndYear(
+      nombre,
+      anio,
+      institucion_id
+    );
+
+  if (existingCourse && existingCourse.id !== parseInt(id)) {
+    throw new Error('COURSE_ALREADY_EXISTS');
+  }
+
+  return await courseRepository.updateCourse(id, courseData);
+};
