@@ -31,6 +31,13 @@ router.get(
   subjectController.listSubjectsWithoutAcademicLoadHandler
 );
 
+router.get(
+  '/inactive',
+  validateToken,
+  checkRole([ROLES.ADMIN]),
+  subjectController.listInactiveSubjectsHandler
+);
+
 router.patch('/:id', 
   validateToken, 
   checkRole([ROLES.ADMIN]), 

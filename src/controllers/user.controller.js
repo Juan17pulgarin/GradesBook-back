@@ -36,15 +36,18 @@ export const createUserHandler = async (req, res) => {
 
 export const deleteUserHandler = async (req, res) => {
   try {
-    const { id } = req.params; 
+    const { id } = req.params;
     const adminId = req.user.id;
+    const { activo } = req.body;
 
-    const result = await userService.deleteUser(id, adminId);
-    
-    res.json({
-      message: 'Usuario desactivado correctamente',
-      user: result
-    });
+    if (typeof activo !== 'boolean') {
+      return res.status(400).json({ message: 'El campo activo es obligatorio y debe ser un booleano' });
+    }
+
+    const result = await userService.deleteUser(id, adminId, activo);
+
+    const message = activo ? 'Usuario activado correctamente' : 'Usuario desactivado correctamente';
+    res.json({ message, user: result });
   } catch (error) {
     if (error.message === 'SELF_DEACTIVATION_FORBIDDEN') {
       return res.status(403).json({ message: 'No puedes desactivar tu propia cuenta' });
@@ -53,6 +56,15 @@ export const deleteUserHandler = async (req, res) => {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
     res.status(500).json({ message: 'Error interno', error: error.message });
+  }
+};
+
+export const listInactiveUsersHandler = async (req, res) => {
+  try {
+    const users = await userService.listInactiveUsers(req.user.institucion_id);
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al listar los usuarios inactivos', error: error.message });
   }
 };
 

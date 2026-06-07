@@ -65,11 +65,27 @@ export const listSubjectsWithoutAcademicLoadHandler = async (req, res) => {
 export const deleteSubjectHandler = async (req, res) => {
   try {
     const { id } = req.params;
-    await subjectService.disableSubject(id, req.user.institucion_id);
-    res.json({ message: "Materia eliminada exitosamente" });
+    const { activo } = req.body;
+
+    if (typeof activo !== 'boolean') {
+      return res.status(400).json({ message: 'El campo activo es obligatorio y debe ser un booleano' });
+    }
+
+    const result = await subjectService.disableSubject(id, req.user.institucion_id, activo);
+    const message = activo ? 'Materia activada exitosamente' : 'Materia desactivada exitosamente';
+    res.json({ message, data: result });
   } catch (error) {
     const statusCode = error.message === 'SUBJECT_NOT_FOUND' ? 404 : 500;
-    const message = error.message === 'SUBJECT_NOT_FOUND' ? "La materia no existe" : "Error al eliminar la materia";
+    const message = error.message === 'SUBJECT_NOT_FOUND' ? "La materia no existe" : "Error al actualizar el estado de la materia";
     res.status(statusCode).json({ message });
+  }
+};
+
+export const listInactiveSubjectsHandler = async (req, res) => {
+  try {
+    const subjects = await subjectService.getInactiveSubjectsList(req.user.institucion_id);
+    res.json(subjects);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener las materias inactivas", error: error.message });
   }
 };

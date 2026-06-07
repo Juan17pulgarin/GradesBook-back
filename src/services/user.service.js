@@ -17,18 +17,22 @@ export const registerUser = async (userData) => {
   });
 };
 
-export const deleteUser = async (targetId, adminId) => {
+export const deleteUser = async (targetId, adminId, status) => {
   if (parseInt(targetId) === parseInt(adminId)) {
     throw new Error('SELF_DEACTIVATION_FORBIDDEN');
   }
 
-  const updatedUser = await userRepository.deleteUser(targetId, false);
-  
+  const updatedUser = await userRepository.deleteUser(targetId, status);
+
   if (!updatedUser) {
     throw new Error('USER_NOT_FOUND');
   }
 
   return updatedUser;
+};
+
+export const listInactiveUsers = async (institucion_id) => {
+  return await userRepository.listInactiveUsers(institucion_id);
 };
 
 export const listUsers = async (currentUserRole, filterTipo, institucion_id) => {

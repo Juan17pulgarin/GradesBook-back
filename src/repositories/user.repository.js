@@ -59,6 +59,26 @@ export const deleteUser = async (id, status) => {
   });
 };
 
+export const listInactiveUsers = async (institucion_id) => {
+  return await prisma.usuarios.findMany({
+    where: {
+      activo: false,
+      institucion_id: parseInt(institucion_id)
+    },
+    select: {
+      id: true,
+      documento: true,
+      nombres: true,
+      apellidos: true,
+      email: true,
+      tipo: true
+    },
+    orderBy: {
+      apellidos: 'asc'
+    }
+  });
+};
+
 export const listUsers = async (tipo = null, institucion_id) => {
   return await prisma.usuarios.findMany({
     where: {

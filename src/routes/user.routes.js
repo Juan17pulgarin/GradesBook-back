@@ -17,10 +17,16 @@ router.patch('/:id',
   userController.deleteUserHandler
 );
 
-router.get('/', 
-  validateToken, 
-  checkRole([ROLES.ADMIN, ROLES.DOCENTE]), 
+router.get('/',
+  validateToken,
+  checkRole([ROLES.ADMIN, ROLES.DOCENTE]),
   userController.listUsersHandler
+);
+
+router.get('/inactive',
+  validateToken,
+  checkRole([ROLES.ADMIN]),
+  userController.listInactiveUsersHandler
 );
 
 router.put('/:id', 
