@@ -27,6 +27,13 @@ router.get(
 );
 
 router.get(
+    '/school-average',
+    validateToken,
+    checkRole([ROLES.ADMIN]),
+    gradeController.schoolAverageHandler
+);
+
+router.get(
     '/average/:estudiante_id/:carga_academica_id/:periodo_id',
     validateToken,
     checkRole([ROLES.DOCENTE]),

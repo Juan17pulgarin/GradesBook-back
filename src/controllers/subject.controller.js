@@ -46,6 +46,22 @@ export const listStudentSubjectsHandler = async (req, res) => {
   }
 };
 
+export const listSubjectsWithoutAcademicLoadHandler = async (req, res) => {
+  try {
+
+    const subjects = await subjectService.getSubjectsWithoutAcademicLoad(req.user.institucion_id);
+    res.json(subjects);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: 'Error al listar materias sin carga académica',
+      error: error.message
+    });
+
+  }
+};
+
 export const deleteSubjectHandler = async (req, res) => {
   try {
     const { id } = req.params;

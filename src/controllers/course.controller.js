@@ -37,3 +37,28 @@ export const listCoursesHandler = async (req, res) => {
     });
   }
 };
+
+export const getAvailableCoursesForSubjectHandler = async (req, res) => {
+  try {
+
+    const courses = await courseService.getAvailableCoursesForSubject(
+        req.params.materia_id,
+        req.user.institucion_id
+      );
+
+    res.json(courses);
+
+  } catch (error) {
+
+    if (error.message === 'SUBJECT_NOT_FOUND') {
+      return res.status(404).json({
+        message: 'La materia no existe'
+      });
+    }
+
+    res.status(500).json({
+      message: 'Error al listar cursos disponibles',
+      error: error.message
+    });
+  }
+};

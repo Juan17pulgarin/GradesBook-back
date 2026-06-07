@@ -107,6 +107,18 @@ export const listGradesByStudent = async (estudiante_id) => {
     });
 };
 
+export const getStudentsBySchool = async (institucion_id) => {
+    return await prisma.usuarios.findMany({
+        where: {
+            institucion_id: parseInt(institucion_id),
+            tipo: 'ESTUDIANTE' 
+        },
+        select: {
+            id: true
+        }
+    });
+};
+
 export const getStudentAverage = async (estudiante_id, carga_academica_id, periodo_id) => {
 
     const grades = await prisma.notas.findMany({

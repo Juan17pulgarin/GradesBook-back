@@ -34,3 +34,30 @@ export const listCourses = async (anio = null, institucion_id) => {
     ]
   });
 };
+
+export const getAvailableCoursesForSubject = async (materia_id, institucion_id) => {
+
+  const assignedCourses = await prisma.carga_academica.findMany({
+    where: {
+      materia_id: parseInt(materia_id)
+    },
+    select: {
+      curso_id: true
+    }
+  });
+
+  const assignedCourseIds = assignedCourses.map(item => item.curso_id);
+
+  return await prisma.cursos.findMany({
+    where: {
+      institucion_id: parseInt(institucion_id),
+      estado: 'ACTIVO',
+      id: {
+        notIn: assignedCourseIds
+      }
+    },
+    orderBy: {
+      nombre: 'asc'
+    }
+  });
+};
