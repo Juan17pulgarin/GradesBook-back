@@ -13,7 +13,7 @@ router.post('/',
 
 router.get('/', 
   validateToken, 
-  checkRole([ROLES.ADMIN, ROLES.DOCENTE]), 
+  checkRole([ROLES.ADMIN]), 
   subjectController.listSubjectsHandler
 );
 

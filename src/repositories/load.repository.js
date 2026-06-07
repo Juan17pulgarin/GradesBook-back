@@ -86,6 +86,45 @@ export const findByCourseAndSubject = async (curso_id, materia_id) => {
 
 };
 
+export const listStudentsByAcademicLoad = async (carga_academica_id) => {
+
+    const academicLoad = await prisma.carga_academica.findUnique({
+        where: {
+            id: parseInt(carga_academica_id)
+        }
+    });
+
+    return await prisma.matriculas.findMany({
+        where: {
+            curso_id: academicLoad.curso_id
+        },
+        include: {
+            usuarios: {
+                select: {
+                    id: true,
+                    nombres: true,
+                    apellidos: true,
+                    documento: true
+                }
+            }
+        }
+    });
+
+};
+
+export const listAcademicLoadsByTeacher = async (docente_id) => {
+    return await prisma.carga_academica.findMany({
+        where: {
+            docente_id: parseInt(docente_id)
+        },
+
+        include: {
+            materias: true,
+            cursos: true
+        }
+    });
+};
+
 export const updateAcademicLoad = async (id, data) => {
     return await prisma.carga_academica.update({
         where: {

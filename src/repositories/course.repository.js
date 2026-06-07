@@ -61,3 +61,37 @@ export const getAvailableCoursesForSubject = async (materia_id, institucion_id) 
     }
   });
 };
+
+export const findCourseById = async (id, institucion_id) => {
+  return await prisma.cursos.findFirst({
+    where: {
+      id: parseInt(id),
+      institucion_id: parseInt(institucion_id)
+    }
+  });
+};
+
+export const updateCourse = async (id, data) => {
+  return await prisma.cursos.update({
+    where: {
+      id: parseInt(id)
+    },
+    data: {
+      ...(data.nombre && {
+        nombre: data.nombre
+      }),
+
+      ...(data.anio && {
+        anio: parseInt(data.anio)
+      }),
+
+      ...(data.capacidad_maxima && {
+        capacidad_maxima: parseInt(data.capacidad_maxima)
+      }),
+
+      ...(data.estado && {
+        estado: data.estado
+      })
+    }
+  });
+};
